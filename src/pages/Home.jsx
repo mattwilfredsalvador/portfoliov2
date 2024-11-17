@@ -1,4 +1,4 @@
-import { useState, useEffect, Suspense } from "react";
+import { useState, useEffect, Suspense, useRef } from "react";
 import { Canvas, extend } from "@react-three/fiber";
 import Loader from "../components/Loader";
 import Planet from "../models/Planet";
@@ -6,20 +6,26 @@ import Bird from "../models/Bird";
 import Sky from "../models/Sky";
 import Plane from "../models/Plane";
 
-import { FontLoader } from 'three/examples/jsm/loaders/FontLoader'
-import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry'
-import fontToUse from '../assets/fonts/Rubik Iso_Regular.json'
+import { FontLoader } from "three/examples/jsm/loaders/FontLoader";
+import { TextGeometry } from "three/examples/jsm/geometries/TextGeometry";
+import fontToUse from "../assets/fonts/Rubik Iso_Regular.json";
 
-extend ({ TextGeometry })
+extend({ TextGeometry });
 
 import { OrbitControls } from "@react-three/drei";
 
 const Home = () => {
-  const font = new FontLoader().parse(fontToUse)
+  const font = new FontLoader().parse(fontToUse);
   const [isHovered, setIsHovered] = useState(false);
   const [isRotating, setIsRotating] = useState(false);
 
+  const aboutRef = useRef();
+
   const [currentStage, setCurrentStage] = useState(1);
+
+  var option = "portfolio"
+
+
 
   const adjustPlanetForScreenSize = () => {
     let screenScale = null;
@@ -56,10 +62,10 @@ const Home = () => {
 
     if (window.innerWidth < 768) {
       screenScale = 5;
-      screenPosition = [-29.5, 17, -90]
+      screenPosition = [-29.5, 17, -90];
     } else {
       screenScale = 8;
-      screenPosition = [-46, 22, -90]
+      screenPosition = [-46, 22, -90];
     }
     return [screenScale, screenPosition];
   };
@@ -69,34 +75,35 @@ const Home = () => {
 
     if (window.innerWidth < 768) {
       screenScale = 9;
-      screenPosition = [-30, 10, -90]
+      screenPosition = [-30, 10, -90];
     } else {
       screenScale = 15;
-      screenPosition = [-47, 10, -90]
+      screenPosition = [-47, 10, -90];
     }
     return [screenScale, screenPosition];
   };
-  
+
   const [planetScale, planetPosition, planetRotation] = adjustPlanetForScreenSize();
-  const [planeScale, planePosition] = adjustPlaneForScreenSize(); 
+  const [planeScale, planePosition] = adjustPlaneForScreenSize();
   const [nletterScale, nletterPosition] = adjustNameLettersForScreenSize();
   const [pletterScale, pletterPosition] = adjustPortfolioLettersForScreenSize();
 
-  
   return (
     <section className="w-full h-screen relative">
-      {/* <div className="absolute top-28 left-0 right-0 z-10 flex items-center justify-center font-xl text-white">
+      <div className="absolute bottom-0 right-0 z-10 flex items-center justify-center font-xl text-white">
         Matt Wilfred Salvador
-      </div> */}
+      </div>
 
-      
       <Canvas
+        onPointerMissed={() =>
+          console.log("you clicked, but hit nothing at all")
+        }
         className={`w-full h-screen bg-transparent ${
           isRotating ? `cursor-grabbing` : `cursor-grab`
         }`}
         camera={{ near: 0.1, far: 1000 }}
       >
-        <OrbitControls minDistance={0} maxDistance={50} />
+        {/* <OrbitControls minDistance={5} maxDistance={10} /> */}
 
         <Suspense fallback={<Loader />}>
           <directionalLight position={[1, 1, 1]} intensity={0.1} />
@@ -114,18 +121,27 @@ const Home = () => {
             intensity={10}
           />
 
-          <mesh position={nletterPosition}>
-            <textGeometry args={["matt's", {font, size: nletterScale, height: 1}]}/>
-            <meshPhysicalMaterial attach='material' color={'white'}/>
+          <mesh
+            onClick={() => console.log("you clicked me")}
+            position={nletterPosition}
+          >
+            <textGeometry
+              args={["matt's", { font, size: nletterScale, height: 1 }]}
+            />
+            <meshPhysicalMaterial attach="material" color={"white"} />
           </mesh>
 
-          <mesh position={pletterPosition}>
-            <textGeometry args={['portfolio', {font, size: pletterScale, height: 1}]}/>
-            <meshPhysicalMaterial attach='material' color={'white'}/>
+          <mesh 
+          ref={aboutRef}
+            position={pletterPosition}>
+            <textGeometry
+              args={[option, { font, size: pletterScale, height: 1 }]}
+            />
+            <meshPhysicalMaterial attach="material" color={"white"} />
           </mesh>
 
-          <Bird isRotating={isRotating} />
-w
+          <Bird isRotating={isRotating} aboutRef={aboutRef} option={option} />
+          
           <Sky isRotating={isRotating} />
 
           <Planet

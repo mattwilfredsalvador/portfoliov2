@@ -6,20 +6,24 @@ Source: https://sketchfab.com/3d-models/little-planet-37f059291bbe40aa89e63d788d
 Title: Little Planet
 */
 
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import { useGLTF } from "@react-three/drei";
 import { useFrame, useThree } from "@react-three/fiber";
 import { a } from "@react-spring/three";
+import { useNavigate } from "react-router-dom";
+
 
 import planetScene from "../assets/3d/stylized_planet.glb";
 
 const Planet = ({ isRotating, setIsRotating, setCurrentStage, ...props }) => {
   const planetRef = useRef();
+  const [isPlanetClicked, setIsPlanetClicked] = useState(false) 
 
   // Get access to the animations for the bird
 
   const { gl, viewport } = useThree();
   const { nodes, materials } = useGLTF(planetScene);
+  const navigate = useNavigate();
 
   const lastX = useRef(0);
   const rotationSpeed = useRef(0);
@@ -29,151 +33,191 @@ const Planet = ({ isRotating, setIsRotating, setCurrentStage, ...props }) => {
      planetRef.current.rotation.y += 0.10 * delta
   })
 
-  const handlePointerDown = (e) => {
-    e.stopPropagation();
-    e.preventDefault();
-    setIsRotating(true);
+  useFrame(({ camera }) => {
 
-    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    if (isPlanetClicked){
 
-    lastX.current = clientX;
-  };
+      const basefov = 75
+      const basex = 0
 
-  const handlePointerUp = (e) => {
-    e.stopPropagation();
-    e.preventDefault();
-    setIsRotating(false);
-  };
-
-  const handlePointerMove = (e) => {
-    e.stopPropagation();
-    e.preventDefault();
-
-    if (isRotating) {
-      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-
-      const delta = (clientX - lastX.current) / viewport.width;
-      planetRef.current.rotation.y += delta * 0.01 * Math.PI;
-
-      lastX.current = clientX;
-
-      rotationSpeed.current = delta * 0.01 * Math.PI;
-    }
-  };
-
-  const handleKeyDown = (e) => {
-    if (e.key === "ArrowLeft") {
-      if (!isRotating) setIsRotating(true);
-      islandRef.current.rotation.y += 0.01 * Math.PI;
-    } else if (e.key === "ArrowRight") {
-      if (!isRotating) setIsRotating(true);
-      islandRef.current.rotation.y -= 0.01 * Math.PI;
-    }
-  };
-
-  const handleKeyUp = (e) => {
-    if (e.key === "ArrowLeft" || e.key === "ArrowRight") {
-      setIsRotating(false);
-    }
-  };
-
-   // Touch events for mobile devices
-   const handleTouchStart = (e) => {
-    e.stopPropagation();
-    e.preventDefault();
-    setIsRotating(true);
-  
-    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-    lastX.current = clientX;
-  }
-  
-  const handleTouchEnd = (e) => {
-    e.stopPropagation();
-    e.preventDefault();
-    setIsRotating(false);
-  }
-  
-  const handleTouchMove = (e) => {
-    e.stopPropagation();
-    e.preventDefault();
-  
-    if (isRotating) {
-      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-      const delta = (clientX - lastX.current) / viewport.width;
-  
-      planetRef.current.rotation.y += delta * 0.01 * Math.PI;
-      lastX.current = clientX;
-      rotationSpeed.current = delta * 0.01 * Math.PI;
-    }
-  }
-
-  useFrame(() => {
-    if (!isRotating) {
-      rotationSpeed.current *= dampingFactor;
-
-      if (Math.abs(rotationSpeed.current) < 0.001) {
-        rotationSpeed.current = 0;
-      }
-
-      planetRef.current.rotation.y += rotationSpeed.current;
-    } else {
-      const rotation = planetRef.current.rotation.y;
-
-      const normalizedRotation =
-        ((rotation % (2 * Math.PI)) + 2 * Math.PI) % (2 * Math.PI);
-
-      // Set the current stage based on the island's orientation
-      switch (true) {
-        case normalizedRotation >= 5.45 && normalizedRotation <= 5.85:
-          setCurrentStage(4);
-          break;
-        case normalizedRotation >= 0.85 && normalizedRotation <= 1.3:
-          setCurrentStage(3);
-          break;
-        case normalizedRotation >= 2.4 && normalizedRotation <= 2.6:
-          setCurrentStage(2);
-          break;
-        case normalizedRotation >= 4.25 && normalizedRotation <= 4.75:
-          setCurrentStage(1);
-          break;
-        default:
-          setCurrentStage(null);
+      if (camera.fov < basefov || camera.position.x > basex){
+        camera.fov += 0.5;
+        camera.position.x -= 0.5;
+        camera.updateProjectionMatrix();
+      } else if (camera.fov > basefov || camera.position.x < basex){
+        setIsPlanetClicked(false)
       }
     }
+    
+    // else {
+    //   const basefov = 75
+    //   const basex = 5
+
+    //   if (camera.fov < basefov && camera.position.x > basex){
+    //     camera.fov += 0.5;
+    //     camera.position.x -= 0.1;
+    //     camera.updateProjectionMatrix();
+    //   }
+    // }
+    
   });
 
-  useEffect(() => {
-    const canvas = gl.domElement;
-    canvas.addEventListener("pointerdown", handlePointerDown);
-    canvas.addEventListener("pointerup", handlePointerUp);
-    canvas.addEventListener("pointermove", handlePointerMove);
-    document.addEventListener("keydown", handleKeyDown);
-    document.addEventListener("keyup", handleKeyUp);
-    canvas.addEventListener("touchstart", handleTouchStart);
-    canvas.addEventListener("touchend", handleTouchEnd);
-    canvas.addEventListener("touchmove", handleTouchMove);
+  // const handlePointerDown = (e) => {
+  //   e.stopPropagation();
+  //   e.preventDefault();
+  //   setIsRotating(true);
 
-    return () => {
-      canvas.removeEventListener("pointerdown", handlePointerDown);
-      canvas.removeEventListener("pointerup", handlePointerUp);
-      canvas.removeEventListener("pointermove", handlePointerMove);
-      document.removeEventListener("keydown", handleKeyDown);
-      document.removeEventListener("keyup", handleKeyUp);
-      canvas.removeEventListener("touchstart", handleTouchStart);
-      canvas.removeEventListener("touchend", handleTouchEnd);
-      canvas.removeEventListener("touchmove", handleTouchMove);
-    };
-  }, [
-    gl,
-    handlePointerDown,
-    handlePointerUp,
-    handlePointerMove,
-    handleKeyDown,
-    handleKeyUp,
-  ]);
+  //   const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+
+  //   lastX.current = clientX;
+  // };
+
+  // const handlePointerUp = (e) => {
+  //   e.stopPropagation();
+  //   e.preventDefault();
+  //   setIsRotating(false);
+  // };
+
+  // const handlePointerMove = (e) => {
+  //   e.stopPropagation();
+  //   e.preventDefault();
+
+  //   if (isRotating) {
+  //     const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+
+  //     const delta = (clientX - lastX.current) / viewport.width;
+  //     planetRef.current.rotation.y += delta * 0.01 * Math.PI;
+
+  //     lastX.current = clientX;
+
+  //     rotationSpeed.current = delta * 0.01 * Math.PI;
+  //   }
+  // };
+
+  // const handleKeyDown = (e) => {
+  //   if (e.key === "ArrowLeft") {
+  //     if (!isRotating) setIsRotating(true);
+  //     islandRef.current.rotation.y += 0.01 * Math.PI;
+  //   } else if (e.key === "ArrowRight") {
+  //     if (!isRotating) setIsRotating(true);
+  //     islandRef.current.rotation.y -= 0.01 * Math.PI;
+  //   }
+  // };
+
+  // const handleKeyUp = (e) => {
+  //   if (e.key === "ArrowLeft" || e.key === "ArrowRight") {
+  //     setIsRotating(false);
+  //   }
+  // };
+
+  //  // Touch events for mobile devices
+  //  const handleTouchStart = (e) => {
+  //   e.stopPropagation();
+  //   e.preventDefault();
+  //   setIsRotating(true);
+  
+  //   const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+  //   lastX.current = clientX;
+  // }
+  
+  // const handleTouchEnd = (e) => {
+  //   e.stopPropagation();
+  //   e.preventDefault();
+  //   setIsRotating(false);
+  // }
+  
+  // const handleTouchMove = (e) => {
+  //   e.stopPropagation();
+  //   e.preventDefault();
+  
+  //   if (isRotating) {
+  //     const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+  //     const delta = (clientX - lastX.current) / viewport.width;
+  
+  //     planetRef.current.rotation.y += delta * 0.01 * Math.PI;
+  //     lastX.current = clientX;
+  //     rotationSpeed.current = delta * 0.01 * Math.PI;
+  //   }
+  // }
+
+  // useFrame(() => {
+  //   if (!isRotating) {
+  //     rotationSpeed.current *= dampingFactor;
+
+  //     if (Math.abs(rotationSpeed.current) < 0.001) {
+  //       rotationSpeed.current = 0;
+  //     }
+
+  //     planetRef.current.rotation.y += rotationSpeed.current;
+  //   } else {
+  //     const rotation = planetRef.current.rotation.y;
+
+  //     const normalizedRotation =
+  //       ((rotation % (2 * Math.PI)) + 2 * Math.PI) % (2 * Math.PI);
+
+  //     // Set the current stage based on the island's orientation
+  //     switch (true) {
+  //       case normalizedRotation >= 5.45 && normalizedRotation <= 5.85:
+  //         setCurrentStage(4);
+  //         break;
+  //       case normalizedRotation >= 0.85 && normalizedRotation <= 1.3:
+  //         setCurrentStage(3);
+  //         break;
+  //       case normalizedRotation >= 2.4 && normalizedRotation <= 2.6:
+  //         setCurrentStage(2);
+  //         break;
+  //       case normalizedRotation >= 4.25 && normalizedRotation <= 4.75:
+  //         setCurrentStage(1);
+  //         break;
+  //       default:
+  //         setCurrentStage(null);
+  //     }
+  //   }
+  // });
+
+  // useEffect(() => {
+  //   const canvas = gl.domElement;
+
+  //   canvas.addEventListener("pointerdown", handlePointerDown);
+  //   canvas.addEventListener("pointerup", handlePointerUp);
+  //   canvas.addEventListener("pointermove", handlePointerMove);
+  //   document.addEventListener("keydown", handleKeyDown);
+  //   document.addEventListener("keyup", handleKeyUp);
+  //   canvas.addEventListener("touchstart", handleTouchStart);
+  //   canvas.addEventListener("touchend", handleTouchEnd);
+  //   canvas.addEventListener("touchmove", handleTouchMove);
+
+  //   return () => {
+  //     canvas.removeEventListener("pointerdown", handlePointerDown);
+  //     canvas.removeEventListener("pointerup", handlePointerUp);
+  //     canvas.removeEventListener("pointermove", handlePointerMove);
+  //     document.removeEventListener("keydown", handleKeyDown);
+  //     document.removeEventListener("keyup", handleKeyUp);
+  //     canvas.removeEventListener("touchstart", handleTouchStart);
+  //     canvas.removeEventListener("touchend", handleTouchEnd);
+  //     canvas.removeEventListener("touchmove", handleTouchMove);
+  //   };
+  // }, [
+  //   gl,
+  //   handlePointerDown,
+  //   handlePointerUp,
+  //   handlePointerMove,
+  //   handleKeyDown,
+  //   handleKeyUp,
+  // ]);
 
   return (
-    <a.group ref={planetRef} {...props} dispose={null} onClick={(e) => console.log("I'm Clicked")}>
+    <a.group 
+    ref={planetRef} 
+    {...props} 
+    dispose={null} 
+    onPointerDown={(e) => {
+      //navigate('/')
+      console.log("I'm Clicked")
+      setIsPlanetClicked(true)
+    }
+  }
+    >
       <group name="Sketchfab_Scene">
         <group name="Sketchfab_model" rotation={[-1.54, -0.064, 0]}>
           <group name="root">

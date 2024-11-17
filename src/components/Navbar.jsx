@@ -1,4 +1,6 @@
 import { NavLink } from 'react-router-dom'
+import { useThree } from "@react-three/fiber"
+import * as THREE from "three"
 
 const Navbar = () => {
   return (
@@ -13,7 +15,9 @@ const Navbar = () => {
             
         
             <span className="flex justify-end text-lg gap-7 font-medium mt-1">
-                <NavLink to="/about" className={({ isActive }) => isActive ? 'text-blue-500' : 'text-white'}> 
+                <NavLink 
+                to="/about" 
+                className={({ isActive }) => isActive ? 'text-blue-500' : 'text-white'}> 
                     About
                 </NavLink>
 

@@ -7,11 +7,10 @@ import birdScene from "../assets/3d/low-poly_falling_astronaut_-_3december.glb";
 import { useAnimations, useGLTF } from "@react-three/drei";
 import { useFrame, useThree } from "@react-three/fiber";
 
-import TWEEN from '@tweenjs/tween.js'
 
-const Bird = ({ isRotating, aboutRef }) => {
+const Bird = ({ isRotating, isHovered, setIsHovered }) => {
   const birdRef = useRef();
-  const [isHovered, setIsHovered] = useState(false)
+  // const [isHovered, setIsHovered] = useState(false)
 
   const navigate = useNavigate();
   //   const renderer = new THREE.WebGLRenderer();
@@ -81,8 +80,11 @@ const Bird = ({ isRotating, aboutRef }) => {
       // camera.updateProjectionMatrix();
       // camera.position.set(10,50,50)
 
+      // const targetfov = 70
+      // const targetx = 22
+
       const targetfov = 70
-      const targetx = 22
+      const targetx = 23
 
       if (camera.fov > targetfov || camera.position.x < targetx){
         camera.fov -= 0.3;

@@ -4,6 +4,12 @@ import Loader from "../components/Loader";
 import Planet from "../models/Planet";
 import Bird from "../models/Bird";
 import Sky from "../models/Sky";
+import Kriya from "../models/projects/Kriya"
+import Fullsuite from "../models/projects/Fullsuite"
+import Capstone from "../models/projects/Capstone"
+import Internship from "../models/projects/Internship"
+import Prediction from "../models/projects/Prediction"
+import Training from "../models/projects/Training"
 import Plane from "../models/Plane";
 
 import { FontLoader } from "three/examples/jsm/loaders/FontLoader";
@@ -90,9 +96,10 @@ const Home = () => {
 
   return (
     <section className="w-full h-screen relative">
-      <div className="absolute bottom-0 right-0 z-10 flex items-center justify-center font-xl text-white">
+
+      {/* <div className="absolute bottom-0 right-0 z-10 flex items-center justify-center bg-red-500 font-xl text-white">
         Matt Wilfred Salvador
-      </div>
+      </div> */}
 
       <Canvas
         onPointerMissed={() =>
@@ -103,7 +110,7 @@ const Home = () => {
         }`}
         camera={{ near: 0.1, far: 1000 }}
       >
-        {/* <OrbitControls minDistance={5} maxDistance={10} /> */}
+        {/* <OrbitControls minDistance={5} maxDistance={10} enableZoom={false}/> */}
 
         <Suspense fallback={<Loader />}>
           <directionalLight position={[1, 1, 1]} intensity={0.1} />
@@ -140,9 +147,16 @@ const Home = () => {
             <meshPhysicalMaterial attach="material" color={"white"} />
           </mesh>
 
-          <Bird isRotating={isRotating} aboutRef={aboutRef} option={option} />
+          <Bird isRotating={isRotating} aboutRef={aboutRef} isHovered={isHovered} setIsHovered={setIsHovered} />
           
           <Sky isRotating={isRotating} />
+
+          <Kriya />
+          <Fullsuite />
+          <Capstone />
+          <Internship />
+          <Training />
+          <Prediction />
 
           <Planet
             scale={planetScale}

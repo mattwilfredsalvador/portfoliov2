@@ -8,7 +8,7 @@ import { useAnimations, useGLTF } from "@react-three/drei";
 import { useFrame, useThree } from "@react-three/fiber";
 
 
-const Bird = ({ isRotating, isHovered, setIsHovered }) => {
+const Bird = ({ isRotating, isHovered, setIsHovered, nameRef, portfolioRef }) => {
   const birdRef = useRef();
   // const [isHovered, setIsHovered] = useState(false)
 
@@ -84,9 +84,11 @@ const Bird = ({ isRotating, isHovered, setIsHovered }) => {
       // const targetx = 22
 
       const targetfov = 70
-      const targetx = 23
+      const targetx = 22
 
       if (camera.fov > targetfov || camera.position.x < targetx){
+        portfolioRef.current.position.y += 1
+        nameRef.current.position.y += 1
         camera.fov -= 0.3;
         camera.position.x += 0.3
         camera.updateProjectionMatrix();

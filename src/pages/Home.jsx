@@ -24,6 +24,8 @@ const Home = () => {
   const font = new FontLoader().parse(fontToUse);
   const [isHovered, setIsHovered] = useState(false);
   const [isRotating, setIsRotating] = useState(false);
+  const nameRef = useRef()
+  const portfolioRef = useRef()
 
   const aboutRef = useRef();
 
@@ -129,6 +131,7 @@ const Home = () => {
           />
 
           <mesh
+            ref={nameRef}
             onClick={() => console.log("you clicked me")}
             position={nletterPosition}
           >
@@ -139,7 +142,7 @@ const Home = () => {
           </mesh>
 
           <mesh 
-          ref={aboutRef}
+          ref={portfolioRef}
             position={pletterPosition}>
             <textGeometry
               args={[option, { font, size: pletterScale, height: 1 }]}
@@ -147,7 +150,13 @@ const Home = () => {
             <meshPhysicalMaterial attach="material" color={"white"} />
           </mesh>
 
-          <Bird isRotating={isRotating} aboutRef={aboutRef} isHovered={isHovered} setIsHovered={setIsHovered} />
+          <Bird 
+            isRotating={isRotating} 
+            isHovered={isHovered} 
+            setIsHovered={setIsHovered} 
+            nameRef={nameRef}
+            portfolioRef={portfolioRef}
+          />
           
           <Sky isRotating={isRotating} />
 
@@ -165,6 +174,8 @@ const Home = () => {
             isRotating={isRotating}
             setIsRotating={setIsRotating}
             setCurrentStage={setCurrentStage}
+            nameRef={nameRef}
+            portfolioRef={portfolioRef}
           />
 
           {/* <Plane 

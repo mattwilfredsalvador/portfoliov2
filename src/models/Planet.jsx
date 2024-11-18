@@ -15,7 +15,7 @@ import { useNavigate } from "react-router-dom";
 
 import planetScene from "../assets/3d/stylized_planet.glb";
 
-const Planet = ({ isRotating, setIsRotating, setCurrentStage, ...props }) => {
+const Planet = ({ isRotating, setIsRotating, setCurrentStage, nameRef, portfolioRef, ...props }) => {
   const planetRef = useRef();
   const [isPlanetClicked, setIsPlanetClicked] = useState(false) 
 
@@ -39,8 +39,10 @@ const Planet = ({ isRotating, setIsRotating, setCurrentStage, ...props }) => {
 
       const basefov = 75
       const basex = 0
-
-      if (camera.fov < basefov || camera.position.x > basex){
+      
+      if (camera.fov < basefov || camera.position.x > basex ){
+        portfolioRef.current.position.y -= 1.6
+        nameRef.current.position.y -= 1.6
         camera.fov += 0.5;
         camera.position.x -= 0.5;
         camera.updateProjectionMatrix();

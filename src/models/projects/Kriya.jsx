@@ -16,7 +16,7 @@ const Kriya = ({...props}) => {
   //const material = new THREE.MeshBasicMaterial( { map: texture } );
 
   const geometry = new THREE.BoxGeometry( 1.5, 1, 0.05);
-  const material = new THREE.MeshBasicMaterial( {map: texture, side: THREE.FrontSide} );
+  const material = new THREE.MeshPhongMaterial( {map: texture, side: THREE.FrontSide });
   material.toneMapped = false
   const plane = new THREE.Mesh( geometry, material );
 

@@ -10,6 +10,7 @@ import Capstone from "../models/projects/Capstone"
 import Internship from "../models/projects/Internship"
 import Prediction from "../models/projects/Prediction"
 import Training from "../models/projects/Training"
+import Teetalk from "../models/projects/Teetalk"
 import Plane from "../models/Plane";
 
 import { FontLoader } from "three/examples/jsm/loaders/FontLoader";
@@ -28,6 +29,8 @@ const Home = () => {
   const portfolioRef = useRef()
 
   const aboutRef = useRef();
+  const projectRef = useRef();
+  const [isVisible, setIsVisible] = useState(false)
 
   const [currentStage, setCurrentStage] = useState(1);
 
@@ -99,7 +102,8 @@ const Home = () => {
       screenPosition = [-12, -50, -50];
     } else {
       screenScale = 7;
-      screenPosition = [-20, -50, -45];
+      //screenPosition = [-20, -50, -45];
+      screenPosition = [-65, -50, -45];
     }
     return [screenScale, screenPosition];
   };
@@ -113,9 +117,12 @@ const Home = () => {
   return (
     <section className="w-full h-screen relative">
 
-      {/* <div className="absolute bottom-0 right-0 z-10 flex items-center justify-center bg-red-500 font-xl text-white">
-        Matt Wilfred Salvador
-      </div> */}
+      <div className={`absolute w-[50%] h-screen right-0 z-[1] p-10 bg-black font-xl opacity-[80%] text-white ${isVisible ? 'block' : 'hidden'}`}>
+        {/* <button onClick={() => setIsVisible(false)}>x</button> */}
+        <h1 className="text-xl">FullSuite Website</h1>
+        <p>Project Involvement</p>
+        <p>Description</p>
+      </div>
 
       <Canvas
         onPointerMissed={() =>
@@ -194,19 +201,23 @@ const Home = () => {
             <meshPhysicalMaterial attach="material" color={"white"} />
           </mesh>
 
-          <Kriya />
-          <Fullsuite />
-          <Capstone />
-          <Internship />
-          <Training />
-          <Prediction />
+          <Kriya isVisible={isVisible} setIsVisible={setIsVisible}/>
+          <Fullsuite 
+          isVisible={isVisible} setIsVisible={setIsVisible}
+          />
+          <Capstone isVisible={isVisible} setIsVisible={setIsVisible}/>
+          <Internship isVisible={isVisible} setIsVisible={setIsVisible}/>
+          <Training isVisible={isVisible} setIsVisible={setIsVisible}/>
+          <Prediction isVisible={isVisible} setIsVisible={setIsVisible}/>
+          <Teetalk isVisible={isVisible} setIsVisible={setIsVisible}/>
 
           {/* <Plane 
-                scale={planeScale}
-                position={planePosition}
-                isRotating={isRotating}
-                rotation={[0, 20, 0]}
-                /> */}
+            scale={planeScale}
+            position={planePosition}
+            isRotating={isRotating}
+            rotation={[0, 20, 0]}
+          /> */}
+
         </Suspense>
       </Canvas>
     </section>

@@ -7,7 +7,8 @@ import * as THREE from "three"
 
 import textureImage from "../../assets/images/fullsuite.png"
 
-const Fullsuite = ({...props}) => {
+const Fullsuite = ( {isVisible, setIsVisible, ...props}) => {
+  const [isClicked, setIsClicked] = useState(false)
   const [isHovered, setIsHovered] = useState(false)
   const tabletRef = useRef()
   // const { nodes, materials} = useGLTF(tabletScene)
@@ -25,16 +26,46 @@ const Fullsuite = ({...props}) => {
   //     tabletRef.current.rotation.x += 0.30 * delta  
   // })
 
- const handleOnHover = () => {
-  setIsHovered(true)
- }
+  useFrame((_, delta) => {
+    if (isHovered){
+      tabletRef.current.position.lerp(new THREE.Vector3(-47, -63, -37), 0.1)
+    } else if(!isHovered){
+      tabletRef.current.rotation.x += 0.1 * delta
+      tabletRef.current.position.lerp(new THREE.Vector3(-50, -65, -40), 0.1)
+    }
+
+    // if (isClicked){
+    //   //tabletRef.current.position.lerp(new THREE.Vector3(3, -73, -5), 0.1)
+    //   //tabletRef.current.position.lerp(new THREE.Vector3(3, -73, -5), 0.1)
+    //   // tabletRef.current.rotation.y = 0
+    // }
+  })
+  
+  const handleOnHover = () => {
+    setIsHovered(true)
+    tabletRef.current.rotation.x = 0
+    setIsVisible(true)
+  }
+
+  const handleOnLeave = () => {
+    setIsHovered(false)
+    setIsVisible(false)
+  }
+
+  const handleOnClick = () => {
+    setIsClicked(true)
+    //setIsVisible(true)
+  }
 
   return ( 
     <mesh
       ref={tabletRef}
       material={material}
-      scale={10}
-      position={[-28, -100, -50]}
+      scale={7}
+      //position={[-40, -60, -40]}
+      onPointerOver={handleOnHover}
+      onPointerLeave={handleOnLeave}
+      onPointerDown={handleOnClick}
     >
       <primitive object={plane} />
     </mesh>

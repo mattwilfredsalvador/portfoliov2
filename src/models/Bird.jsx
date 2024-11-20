@@ -82,7 +82,7 @@ const Bird = ({ isRotating, isHovered, setIsHovered, nameRef, portfolioRef }) =>
 
     if (isHovered){
 
-      camera.position.lerp(new THREE.Vector3(0, -80, 5), 0.5)
+      camera.position.lerp(new THREE.Vector3(0, -80, 5), 0.1)
     }
   });
 

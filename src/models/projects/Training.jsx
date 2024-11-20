@@ -30,7 +30,7 @@ const Training = ( {isVisible, setIsVisible, ...props}) => {
     if (isHovered){
       tabletRef.current.position.lerp(new THREE.Vector3(-10, -78, -37), 0.1)
     } else if(!isHovered){
-      tabletRef.current.rotation.x += 0.15 * delta
+      tabletRef.current.rotation.x += 0.1 * delta
       tabletRef.current.rotation.y += 0.1 * delta
       tabletRef.current.position.lerp(new THREE.Vector3(-10, -80, -40), 0.1)
     }
@@ -46,17 +46,17 @@ const Training = ( {isVisible, setIsVisible, ...props}) => {
     setIsHovered(true)
     tabletRef.current.rotation.x = 0
     tabletRef.current.rotation.y = 0
-    setIsVisible(true)
+    //setIsVisible(true)
   }
 
   const handleOnLeave = () => {
     setIsHovered(false)
-    setIsVisible(false)
+    //setIsVisible(false)
   }
 
   const handleOnClick = () => {
     setIsClicked(true)
-    //setIsVisible(true)
+    setIsVisible(true)
   }
 
   return ( 

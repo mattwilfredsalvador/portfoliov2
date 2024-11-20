@@ -118,7 +118,7 @@ const Home = () => {
     <section className="w-full h-screen relative">
 
       <div className={`absolute w-[50%] h-screen right-0 z-[1] p-10 bg-black font-xl opacity-[80%] text-white ${isVisible ? 'block' : 'hidden'}`}>
-        {/* <button onClick={() => setIsVisible(false)}>x</button> */}
+        <button onClick={() => setIsVisible(false)}>x</button>
         <h1 className="text-xl">FullSuite Website</h1>
         <p>Project Involvement</p>
         <p>Description</p>

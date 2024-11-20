@@ -46,17 +46,16 @@ const Prediction = ( {isVisible, setIsVisible, ...props}) => {
     setIsHovered(true)
     tabletRef.current.rotation.x = 0
     tabletRef.current.rotation.y = 0
-    setIsVisible(true)
   }
 
   const handleOnLeave = () => {
     setIsHovered(false)
-    setIsVisible(false)
+    //setIsVisible(false)
   }
 
   const handleOnClick = () => {
     setIsClicked(true)
-    //setIsVisible(true)
+    setIsVisible(true)
   }
 
   return ( 

@@ -44,17 +44,17 @@ const Fullsuite = ( {isVisible, setIsVisible, ...props}) => {
   const handleOnHover = () => {
     setIsHovered(true)
     tabletRef.current.rotation.x = 0
-    setIsVisible(true)
+    //setIsVisible(true)
   }
 
   const handleOnLeave = () => {
     setIsHovered(false)
-    setIsVisible(false)
+    //setIsVisible(false)
   }
 
   const handleOnClick = () => {
     setIsClicked(true)
-    //setIsVisible(true)
+    setIsVisible(true)
   }
 
   return ( 

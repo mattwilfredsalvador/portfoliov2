@@ -21,10 +21,10 @@ const Capstone = ({...props}) => {
   material.toneMapped = false
   const plane = new THREE.Mesh( geometry, material );
 
-  useFrame((_, delta) => {
-    tabletRef.current.rotation.y += 0.30 * delta
-    tabletRef.current.rotation.z += 0.15 * delta
- })
+//   useFrame((_, delta) => {
+//     tabletRef.current.rotation.y += 0.30 * delta
+//     tabletRef.current.rotation.z += 0.15 * delta
+//  })
 
   return ( 
 
@@ -32,7 +32,7 @@ const Capstone = ({...props}) => {
         ref={tabletRef}
         material={material}
         scale={2}
-        position={[32, 0, -10]}
+        position={[0, -100, 5]}
       >
         <primitive object={plane} />
       </mesh>

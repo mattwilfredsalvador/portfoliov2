@@ -20,17 +20,17 @@ const Kriya = ({...props}) => {
   material.toneMapped = false
   const plane = new THREE.Mesh( geometry, material );
 
-  useFrame((_, delta) => {
-    tabletRef.current.rotation.y += 0.30 * delta
-    tabletRef.current.rotation.z += 0.05 * delta
- })
+//   useFrame((_, delta) => {
+//     tabletRef.current.rotation.y += 0.30 * delta
+//     tabletRef.current.rotation.z += 0.05 * delta
+//  })
 
   return ( 
     <mesh
       ref={tabletRef}
       material={material}
       scale={2}
-      position={[24, 0, -10]}
+      position={[0, -100, 5]}
     >
       <primitive object={plane} />
     </mesh>

@@ -91,10 +91,24 @@ const Home = () => {
     return [screenScale, screenPosition];
   };
 
+  const adjustProjectsLettersForScreenSize = () => {
+    let screenScale, screenPosition;
+
+    if (window.innerWidth < 768) {
+      screenScale = 4;
+      screenPosition = [-12, -50, -50];
+    } else {
+      screenScale = 7;
+      screenPosition = [-20, -50, -45];
+    }
+    return [screenScale, screenPosition];
+  };
+
   const [planetScale, planetPosition, planetRotation] = adjustPlanetForScreenSize();
-  const [planeScale, planePosition] = adjustPlaneForScreenSize();
+  //const [planeScale, planePosition] = adjustPlaneForScreenSize();
   const [nletterScale, nletterPosition] = adjustNameLettersForScreenSize();
   const [pletterScale, pletterPosition] = adjustPortfolioLettersForScreenSize();
+  const [projLetterScale, projLetterPosition] = adjustProjectsLettersForScreenSize();
 
   return (
     <section className="w-full h-screen relative">
@@ -130,6 +144,17 @@ const Home = () => {
             intensity={10}
           />
 
+          <Planet
+            scale={planetScale}
+            position={planetPosition}
+            rotation={planetRotation}
+            isRotating={isRotating}
+            setIsRotating={setIsRotating}
+            setCurrentStage={setCurrentStage}
+            nameRef={nameRef}
+            portfolioRef={portfolioRef}
+          />
+
           <mesh
             ref={nameRef}
             onClick={() => console.log("you clicked me")}
@@ -142,7 +167,7 @@ const Home = () => {
           </mesh>
 
           <mesh 
-          ref={portfolioRef}
+            ref={portfolioRef}
             position={pletterPosition}>
             <textGeometry
               args={[option, { font, size: pletterScale, height: 1 }]}
@@ -160,23 +185,21 @@ const Home = () => {
           
           <Sky isRotating={isRotating} />
 
+          <mesh
+            position={projLetterPosition}
+          >
+            <textGeometry
+              args={["projects", { font, size: projLetterScale, height: 0.5 }]}
+            />
+            <meshPhysicalMaterial attach="material" color={"white"} />
+          </mesh>
+
           <Kriya />
           <Fullsuite />
           <Capstone />
           <Internship />
           <Training />
           <Prediction />
-
-          <Planet
-            scale={planetScale}
-            position={planetPosition}
-            rotation={planetRotation}
-            isRotating={isRotating}
-            setIsRotating={setIsRotating}
-            setCurrentStage={setCurrentStage}
-            nameRef={nameRef}
-            portfolioRef={portfolioRef}
-          />
 
           {/* <Plane 
                 scale={planeScale}

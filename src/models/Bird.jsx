@@ -7,6 +7,8 @@ import birdScene from "../assets/3d/low-poly_falling_astronaut_-_3december.glb";
 import { useAnimations, useGLTF } from "@react-three/drei";
 import { useFrame, useThree } from "@react-three/fiber";
 
+import * as THREE from "three"
+
 
 const Bird = ({ isRotating, isHovered, setIsHovered, nameRef, portfolioRef }) => {
   const birdRef = useRef();
@@ -23,6 +25,10 @@ const Bird = ({ isRotating, isHovered, setIsHovered, nameRef, portfolioRef }) =>
 
   // Get access to the animations for the bird
   const { actions } = useAnimations(animations, birdRef);
+
+  var startRotation = new THREE.Quaternion();
+  var targetRotation = new THREE.Quaternion();
+  var renderer = new THREE.WebGLRenderer();
 
   // Play the "Take 001" animation when the component mounts
   // Note: Animation names can be found on the Sketchfab website where the 3D model is hosted.
@@ -76,35 +82,8 @@ const Bird = ({ isRotating, isHovered, setIsHovered, nameRef, portfolioRef }) =>
 
     if (isHovered){
 
-      //camera.lookAt(50,50,0);
-      // camera.updateProjectionMatrix();
-      // camera.position.set(10,50,50)
-
-      // const targetfov = 70
-      // const targetx = 22
-
-      const targetfov = 70
-      const targetx = 22
-
-      if (camera.fov > targetfov || camera.position.x < targetx){
-        portfolioRef.current.position.y += 1
-        nameRef.current.position.y += 1
-        camera.fov -= 0.3;
-        camera.position.x += 0.3
-        camera.updateProjectionMatrix();
-      }
+      camera.position.lerp(new THREE.Vector3(0, -80, 5), 0.01)
     }
-    // else {
-    //   const basefov = 7
-    //   const basex = 5
-
-    //   if (camera.fov < basefov && camera.position.x > basex){
-    //     camera.fov += 0.5;
-    //     camera.position.x -= 0.1;
-    //     camera.updateProjectionMatrix();
-    //   }
-    // }
-    
   });
 
   return (

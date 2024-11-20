@@ -20,18 +20,18 @@ const Training = ({...props}) => {
   material.toneMapped = false
   const plane = new THREE.Mesh( geometry, material );
 
-  useFrame((_, delta) => {
-    tabletRef.current.rotation.y += 0.30 * delta
-    tabletRef.current.rotation.z += 0.1 * delta
- })
+//   useFrame((_, delta) => {
+//     tabletRef.current.rotation.y += 0.30 * delta
+//     tabletRef.current.rotation.z += 0.1 * delta
+//  })
 
   return ( 
 
       <mesh
         ref={tabletRef}
         material={material}
-        scale={2}
-        position={[28, -4, -10]}
+        scale={5}
+        position={[-28, -100, -50]}
       >
         <primitive object={plane} />
       </mesh>

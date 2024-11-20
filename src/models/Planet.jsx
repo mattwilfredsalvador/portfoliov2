@@ -12,8 +12,9 @@ import { useFrame, useThree } from "@react-three/fiber";
 import { a } from "@react-spring/three";
 import { useNavigate } from "react-router-dom";
 
-
 import planetScene from "../assets/3d/stylized_planet.glb";
+
+import * as THREE from "three"
 
 const Planet = ({ isRotating, setIsRotating, setCurrentStage, nameRef, portfolioRef, ...props }) => {
   const planetRef = useRef();
@@ -36,19 +37,20 @@ const Planet = ({ isRotating, setIsRotating, setCurrentStage, nameRef, portfolio
   useFrame(({ camera }) => {
 
     if (isPlanetClicked){
+      camera.position.lerp(new THREE.Vector3(0,0,5), 0.01)
 
-      const basefov = 75
-      const basex = 0
+      // const basefov = 75
+      // const basex = 0
       
-      if (camera.fov < basefov || camera.position.x > basex ){
-        portfolioRef.current.position.y -= 1.6
-        nameRef.current.position.y -= 1.6
-        camera.fov += 0.5;
-        camera.position.x -= 0.5;
-        camera.updateProjectionMatrix();
-      } else if (camera.fov > basefov || camera.position.x < basex){
-        setIsPlanetClicked(false)
-      }
+      // if (camera.fov < basefov || camera.position.x > basex ){
+      //   portfolioRef.current.position.y -= 1.6
+      //   nameRef.current.position.y -= 1.6
+      //   camera.fov += 0.5;
+      //   camera.position.x -= 0.5;
+      //   camera.updateProjectionMatrix();
+      // } else if (camera.fov > basefov || camera.position.x < basex){
+      //   setIsPlanetClicked(false)
+      // }
     }
     
     // else {

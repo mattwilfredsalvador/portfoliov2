@@ -21,9 +21,9 @@ const Fullsuite = ({...props}) => {
   material.toneMapped = false
   const plane = new THREE.Mesh( geometry, material );
 
-  useFrame((_, delta) => {
-      tabletRef.current.rotation.x += 0.30 * delta  
-  })
+  // useFrame((_, delta) => {
+  //     tabletRef.current.rotation.x += 0.30 * delta  
+  // })
 
  const handleOnHover = () => {
   setIsHovered(true)
@@ -33,8 +33,8 @@ const Fullsuite = ({...props}) => {
     <mesh
       ref={tabletRef}
       material={material}
-      scale={2}
-      position={[28, 0, -10]}
+      scale={10}
+      position={[-28, -100, -50]}
     >
       <primitive object={plane} />
     </mesh>
